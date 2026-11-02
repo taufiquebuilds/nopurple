@@ -1,0 +1,4 @@
+interface:
+  display_name: "nopurple"
+  short_description: "Slide decks that don't look AI-generated"
+  default_prompt: "Use $nopurple to turn my notes into a slide deck that looks designed, not generated."

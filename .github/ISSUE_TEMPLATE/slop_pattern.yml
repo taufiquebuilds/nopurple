@@ -1,0 +1,14 @@
+name: New slop pattern
+description: A sign of an AI-made deck that nopurple misses
+labels: [slop-pattern]
+body:
+  - type: textarea
+    id: pattern
+    attributes:
+      label: What's the pattern, and what should a designer do instead?
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: An example (screenshot or text)

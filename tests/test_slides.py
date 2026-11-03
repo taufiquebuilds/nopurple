@@ -1,4 +1,4 @@
-"""Tests for the helper scripts. Run with: python3 -m unittest discover -s tests"""
+"""Tests for the slides skill scripts. Run with: python3 -m unittest discover -s tests"""
 
 import importlib.util
 import re
@@ -9,11 +9,12 @@ import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
+SLIDES = ROOT / "skills" / "slides"
 FIX = ROOT / "tests" / "fixtures"
 
 
 def load(name):
-    spec = importlib.util.spec_from_file_location(name, ROOT / "scripts" / f"{name}.py")
+    spec = importlib.util.spec_from_file_location(name, SLIDES / "scripts" / f"{name}.py")
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
@@ -31,7 +32,7 @@ def score(path):
 
 class SlopCheckTests(unittest.TestCase):
     def test_template_deck_is_clean(self):
-        slides, per, deck = score(ROOT / "templates" / "deck.html")
+        slides, per, deck = score(SLIDES / "templates" / "deck.html")
         self.assertEqual(len(slides), 7)
         # The template's only deck issue is its own example text.
         self.assertTrue(deck and all("Example text" in m for _, m in deck), deck)
@@ -45,7 +46,7 @@ class SlopCheckTests(unittest.TestCase):
             self.assertIn(expected, msgs)
 
     def test_comment_in_template_is_not_a_slide(self):
-        slides, _, _ = score(ROOT / "templates" / "deck.html")
+        slides, _, _ = score(SLIDES / "templates" / "deck.html")
         titles = [s["title"] for s in slides]
         self.assertEqual(titles[0], "Retention is our growth engine now")
         self.assertNotIn("LAYOUT", " ".join(s["text"] for s in slides))
@@ -79,7 +80,7 @@ class SlopCheckTests(unittest.TestCase):
         self.assertFalse(slop.purple_gradient("background: linear-gradient(90deg, #f6f4ef, #ffffff)"))
 
     def test_cli_json(self):
-        r = subprocess.run([sys.executable, str(ROOT / "scripts" / "slop_check.py"),
+        r = subprocess.run([sys.executable, str(SLIDES / "scripts" / "slop_check.py"),
                             str(ROOT / "examples" / "before-ai-deck.html"), "--json"],
                            capture_output=True, text=True)
         self.assertEqual(r.returncode, 0)
@@ -93,21 +94,21 @@ class LeftoverTests(unittest.TestCase):
         self.assertTrue(any("Broken CSS" in m for _, m in issues))
 
     def test_template_css_is_ascii(self):
-        html = (ROOT / "templates" / "deck.html").read_text(encoding="utf-8")
+        html = (SLIDES / "templates" / "deck.html").read_text(encoding="utf-8")
         css = html[html.index("<style>"):html.index("</style>")]
         self.assertTrue(all(ord(c) < 128 for c in css))
 
 
 class TemplateTests(unittest.TestCase):
     def test_bar_heights_are_proportional(self):
-        html = (ROOT / "templates" / "deck.html").read_text()
+        html = (SLIDES / "templates" / "deck.html").read_text()
         bars = re.findall(r'style="--v: (\d+)"><b>(\d+)%', html)
         values = [int(v) for _, v in bars]
         for pct, v in bars:
             self.assertEqual(int(pct), round(int(v) / max(values) * 100))
 
     def test_every_theme_defines_the_tokens(self):
-        html = (ROOT / "templates" / "deck.html").read_text()
+        html = (SLIDES / "templates" / "deck.html").read_text()
         for theme in ["ink", "swiss", "forest", "sand", "mono"]:
             block = re.search(r'\[data-theme="%s"\] \{(.*?)\}' % theme, html, re.S).group(1)
             for token in ["--bg", "--fg", "--muted", "--accent"]:

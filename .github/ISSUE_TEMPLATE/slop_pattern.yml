@@ -1,5 +1,5 @@
 name: New slop pattern
-description: A sign of an AI-made deck that nopurple misses
+description: A sign of an AI-made deck or chart that nopurple misses
 labels: [slop-pattern]
 body:
   - type: textarea

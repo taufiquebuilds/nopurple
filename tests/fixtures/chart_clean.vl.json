@@ -1,0 +1,12 @@
+{
+  "title": "Google Ads brought 42% of all leads: 86 of 204",
+  "data": {"values": [{"channel": "Google Ads", "leads": 86}, {"channel": "Organic", "leads": 54},
+                      {"channel": "Referrals", "leads": 31}]},
+  "mark": {"type": "bar"},
+  "encoding": {
+    "y": {"field": "channel", "type": "nominal", "sort": "-x", "title": null},
+    "x": {"field": "leads", "type": "quantitative", "axis": null, "scale": {"zero": true}},
+    "color": {"condition": {"test": "datum.channel === 'Google Ads'", "value": "#d9480f"}, "value": "#d8d3c8"}
+  },
+  "config": {"view": {"stroke": null}, "axis": {"grid": false}}
+}

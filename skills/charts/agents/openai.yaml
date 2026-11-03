@@ -1,0 +1,4 @@
+interface:
+  display_name: "nopurple charts"
+  short_description: "Charts that make one point, not AI rainbow pies"
+  default_prompt: "Use $nopurple-charts to chart my data with the finding as the title, one accent colour and honest scales."
